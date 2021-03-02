@@ -18,12 +18,17 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        signInBtn.rounded(radius: 5, borderWidth: 2, borderColor: .systemBlue)
+        toolBar()
+        setupView()
     }
     
     // MARK:- Button pressed
     @IBAction func signInBtnPressed(_ sender: UIButton) {
         checkReq()
+    }
+    
+    func setupView(){
+        signInBtn.rounded(radius: 5, borderWidth: 2, borderColor: .systemBlue)
     }
     
     // MARK:- When pressed, follow all the requirements to pass
@@ -80,5 +85,21 @@ class LoginViewController: UIViewController {
         
         alertController.addAction(OKAction)
         self.present(alertController, animated: true, completion:nil)
+    }
+    
+    func toolBar(){
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(origin: .zero, size: CGSize(width: 100, height: 44.0))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboard))
+        
+        toolbar.setItems([spaceButton,spaceButton,doneButton], animated: false)
+
+        usernameTextField.inputAccessoryView = toolbar
+        passwordTextField.inputAccessoryView = toolbar
+    }
+    
+    @objc func dismissKeyboard(){
+        self.view.endEditing(true)
     }
 }
