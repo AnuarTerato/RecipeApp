@@ -268,12 +268,30 @@
                                     <outlet property="delegate" destination="pbx-uD-Frj" id="RgK-8J-fAu"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LlB-Tp-aw4">
+                                <rect key="frame" x="338" y="782" width="60" height="60"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="oz1-Z2-hHt"/>
+                                    <constraint firstAttribute="width" constant="60" id="zuC-wU-2Fj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <state key="normal" title="+">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="addBtnPressed:" destination="pbx-uD-Frj" eventType="touchUpInside" id="vfO-pv-vEJ"/>
+                                    <action selector="saveBtnPressed:" destination="qxN-w8-WPW" eventType="touchUpInside" id="45O-5Z-BcS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="in2-aE-nU2"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="in2-aE-nU2" firstAttribute="trailing" secondItem="LlB-Tp-aw4" secondAttribute="trailing" constant="16" id="89o-k4-Uam"/>
                             <constraint firstItem="aKd-qm-cwc" firstAttribute="bottom" secondItem="in2-aE-nU2" secondAttribute="bottom" id="Oe8-jT-jhM"/>
                             <constraint firstItem="in2-aE-nU2" firstAttribute="trailing" secondItem="Y4J-R9-3Ry" secondAttribute="trailing" id="RFo-mP-IHs"/>
+                            <constraint firstItem="in2-aE-nU2" firstAttribute="bottom" secondItem="LlB-Tp-aw4" secondAttribute="bottom" constant="20" id="XwA-ct-OeN"/>
                             <constraint firstItem="aKd-qm-cwc" firstAttribute="top" secondItem="Y4J-R9-3Ry" secondAttribute="bottom" id="Ymu-q7-io6"/>
                             <constraint firstItem="Y4J-R9-3Ry" firstAttribute="leading" secondItem="GUv-KL-i2q" secondAttribute="leading" id="bIb-dq-YOL"/>
                             <constraint firstItem="Y4J-R9-3Ry" firstAttribute="top" secondItem="GUv-KL-i2q" secondAttribute="top" id="fDZ-jN-4d5"/>
@@ -282,6 +300,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addBtn" destination="LlB-Tp-aw4" id="CeL-Kd-bg7"/>
                         <outlet property="searchTextField" destination="jfz-2Z-Aju" id="7C5-Sb-rYa"/>
                         <outlet property="tableView" destination="aKd-qm-cwc" id="FSg-wE-04e"/>
                     </connections>
@@ -473,19 +492,44 @@
                                     <constraint firstAttribute="height" constant="60" id="oTD-bs-RGK"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="okJ-03-Ulj">
+                                <rect key="frame" x="0.0" y="150" width="414" height="200"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YaJ-nV-5ZH">
+                                        <rect key="frame" x="137" y="80" width="140" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="28r-XF-Oti"/>
+                                            <constraint firstAttribute="width" constant="140" id="8ZV-aG-Kyc"/>
+                                        </constraints>
+                                        <state key="normal" title="Tap to add picture"/>
+                                        <connections>
+                                            <action selector="addPictureBtnPressed:" destination="qxN-w8-WPW" eventType="touchUpInside" id="CjR-65-XO6"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="YaJ-nV-5ZH" firstAttribute="centerX" secondItem="okJ-03-Ulj" secondAttribute="centerX" id="9rc-vu-xta"/>
+                                    <constraint firstItem="YaJ-nV-5ZH" firstAttribute="centerY" secondItem="okJ-03-Ulj" secondAttribute="centerY" id="Kbx-cz-jUg"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Gxy-X8-haK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="fdZ-5F-mjY" firstAttribute="trailing" secondItem="Gxy-X8-haK" secondAttribute="trailing" id="6JT-fC-UwY"/>
                             <constraint firstItem="fdZ-5F-mjY" firstAttribute="leading" secondItem="Gxy-X8-haK" secondAttribute="leading" id="Dq1-0F-bWG"/>
+                            <constraint firstItem="okJ-03-Ulj" firstAttribute="top" secondItem="OKP-aw-szB" secondAttribute="bottom" id="IbQ-JW-dlf"/>
                             <constraint firstItem="kwt-ux-jkG" firstAttribute="leading" secondItem="Gxy-X8-haK" secondAttribute="leading" id="McO-p8-0vl"/>
+                            <constraint firstItem="okJ-03-Ulj" firstAttribute="leading" secondItem="Gxy-X8-haK" secondAttribute="leading" id="SFe-rM-NgT"/>
                             <constraint firstItem="XnO-ob-Izp" firstAttribute="width" secondItem="XU9-o2-ij4" secondAttribute="width" id="SXa-It-UzQ"/>
                             <constraint firstItem="OKP-aw-szB" firstAttribute="leading" secondItem="Gxy-X8-haK" secondAttribute="leading" id="TmN-dg-J6f"/>
                             <constraint firstItem="OKP-aw-szB" firstAttribute="trailing" secondItem="Gxy-X8-haK" secondAttribute="trailing" id="TxY-Wn-Iol"/>
                             <constraint firstItem="fdZ-5F-mjY" firstAttribute="top" secondItem="kwt-ux-jkG" secondAttribute="bottom" id="ZwT-EH-MJT"/>
                             <constraint firstItem="Gxy-X8-haK" firstAttribute="bottom" secondItem="Stu-bG-DeS" secondAttribute="bottom" constant="20" id="a4i-yv-ebI"/>
                             <constraint firstItem="Gxy-X8-haK" firstAttribute="trailing" secondItem="Stu-bG-DeS" secondAttribute="trailing" constant="16" id="fb2-hY-5Dg"/>
+                            <constraint firstItem="okJ-03-Ulj" firstAttribute="trailing" secondItem="Gxy-X8-haK" secondAttribute="trailing" id="v7o-qp-pb3"/>
+                            <constraint firstItem="fdZ-5F-mjY" firstAttribute="top" secondItem="okJ-03-Ulj" secondAttribute="bottom" id="vNG-Gb-QY3"/>
                             <constraint firstItem="kwt-ux-jkG" firstAttribute="trailing" secondItem="Gxy-X8-haK" secondAttribute="trailing" id="wwS-ZQ-vvI"/>
                             <constraint firstItem="Gxy-X8-haK" firstAttribute="bottom" secondItem="fdZ-5F-mjY" secondAttribute="bottom" id="xrf-rR-d02"/>
                             <constraint firstItem="OKP-aw-szB" firstAttribute="top" secondItem="XU9-o2-ij4" secondAttribute="top" id="yEG-8Y-cDO"/>
@@ -493,6 +537,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addPictureBtn" destination="YaJ-nV-5ZH" id="Upg-Yn-mfp"/>
+                        <outlet property="addPictureView" destination="okJ-03-Ulj" id="BdF-tm-wuc"/>
                         <outlet property="backgroundBtnView" destination="Stu-bG-DeS" id="BB4-sf-Sdn"/>
                         <outlet property="ingredientsTextField" destination="i6B-fb-shq" id="2PY-Ja-vi6"/>
                         <outlet property="menuImageView" destination="kwt-ux-jkG" id="E8U-zI-5D3"/>

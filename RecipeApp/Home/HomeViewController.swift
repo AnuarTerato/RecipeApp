@@ -20,6 +20,7 @@ class HomeViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchTextField: UITextField!
+    @IBOutlet weak var addBtn: UIButton!
     
     var elementName: String = String()
     var recipeName = String()
@@ -27,17 +28,28 @@ class HomeViewController: UIViewController {
     var recipeIngredients = String()
     var recipeSteps = String()
 
+    var fullStack = [String : UIImage]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
+        toolBar()
         readXML()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        searchTextField.text = ""
+        fullStack = Dictionary(zip(Global.recipeNameArray, Global.recipePictureUIImageArray), uniquingKeysWith: { (first, _) in first })
         tableView.reloadData()
+    }
+    
+    @IBAction func addBtnPressed(_ sender: UIButton) {
+        let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeDetailsViewController") as! HomeDetailsViewController
+        nextVC.checkBool = false
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     @objc func callDeleteCell(_ notification: Notification){
@@ -50,6 +62,7 @@ class HomeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(callDeleteCell), name: Notification.Name("deleteCell"), object: nil)
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(HomeViewController.textFieldDidChange(_:)), for: .editingChanged)
+        addBtn.rounded(radius: 30)
     }
     
     func readXML(){
@@ -64,6 +77,9 @@ class HomeViewController: UIViewController {
         }else{
             print("readXMLElse")
         }
+        
+        fullStack = Dictionary(zip(Global.recipeNameArray, Global.recipePictureUIImageArray), uniquingKeysWith: { (first, _) in first })
+        print("fullStack", fullStack)
     }
     
     func displayAlertMessage(messageToDisplay: String, passDeleteTag: Int) {
@@ -75,9 +91,12 @@ class HomeViewController: UIViewController {
             print("OK")
             Global.recipeNameArray.remove(at: passDeleteTag)
             Global.recipeNameArrayTemp.remove(at: passDeleteTag)
-            Global.recipePictureURLArray.remove(at: passDeleteTag)
+            Global.recipePictureUIImageArray.remove(at: passDeleteTag)
+            Global.recipePictureUIImageArrayTemp.remove(at: passDeleteTag)
             Global.recipeIngredientsArray.remove(at: passDeleteTag)
             Global.recipeStepsArray.remove(at: passDeleteTag)
+            
+            self.fullStack = Dictionary(zip(Global.recipeNameArray, Global.recipePictureUIImageArray), uniquingKeysWith: { (first, _) in first })
             
             self.tableView.reloadData()
         }
@@ -117,13 +136,33 @@ extension HomeViewController: XMLParserDelegate{
                 Global.recipeNameArrayTemp.append(data)
                 Global.recipeNameArray.append(data)
             } else if self.elementName == "PictureURL" {
-                Global.recipePictureURLArray.append(data)
+                let imageUrlString = data
+                let imageUrl = URL(string: imageUrlString)!
+                let imageData = try! Data(contentsOf: imageUrl)
+                let image = UIImage(data: imageData)
+                Global.recipePictureUIImageArray.append(image ?? UIImage())
+                Global.recipePictureUIImageArrayTemp.append(image ?? UIImage())
             }else if self.elementName == "Ingredients" {
                 Global.recipeIngredientsArray.append(data)
             }else if self.elementName == "Steps" {
                 Global.recipeStepsArray.append(data)
             }
         }
+    }
+    
+    func toolBar(){
+        let toolbar = UIToolbar()
+        toolbar.frame = CGRect(origin: .zero, size: CGSize(width: 100, height: 44.0))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboard))
+        
+        toolbar.setItems([spaceButton,spaceButton,doneButton], animated: false)
+
+        searchTextField.inputAccessoryView = toolbar
+    }
+    
+    @objc func dismissKeyboard(){
+        self.view.endEditing(true)
     }
 }
 
@@ -132,7 +171,10 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath) as! HomeTableViewCell
 
         cell.cellName.text = Global.recipeNameArray[indexPath.row]
-        cell.cellImages.sd_setImage(with: URL(string: Global.recipePictureURLArray[indexPath.row]), placeholderImage: nil)
+        if Global.recipePictureUIImageArray.count == Global.recipeNameArray.count{
+            cell.cellImages.image = Global.recipePictureUIImageArray[indexPath.row]
+        }
+
         cell.cellDeleteBtn.tag = indexPath.row
         
         return cell
@@ -148,6 +190,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let nextVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeDetailsViewController") as! HomeDetailsViewController
+        nextVC.checkBool = true
         nextVC.indexNumber = indexPath.row
         
         self.navigationController?.pushViewController(nextVC, animated: true)
@@ -160,13 +203,21 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource{
 
 extension HomeViewController: UITextFieldDelegate {
     @objc func textFieldDidChange(_ textField: UITextField) {
-        let filtered = Global.recipeNameArrayTemp.filter {$0.localizedCaseInsensitiveContains(textField.text!)}
-        Global.recipeNameArray = filtered
-
+        Global.recipeNameArray.removeAll()
+        Global.recipePictureUIImageArray.removeAll()
+        
         if textField.text!.count == 0{
             Global.recipeNameArray = Global.recipeNameArrayTemp
+            Global.recipePictureUIImageArray = Global.recipePictureUIImageArrayTemp
+            tableView.reloadData()
+        }else{
+            fullStack.forEach { (item) in
+                if item.key.localizedCaseInsensitiveContains(textField.text!){
+                    Global.recipeNameArray.append(item.key)
+                    Global.recipePictureUIImageArray.append(item.value)
+                    tableView.reloadData()
+                }
+            }
         }
-        
-        tableView.reloadData()
     }
 }
